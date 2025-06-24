@@ -9,4 +9,3 @@ public class FitnessappApplication {
         SpringApplication.run(FitnessappApplication.class, args);
     }
 }
-	
