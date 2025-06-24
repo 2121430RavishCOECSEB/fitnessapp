@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -43,9 +44,25 @@ public class UserController {
 
     // Delete user by ID
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
+    public ResponseEntity<Map<String, String>> deleteUser(@PathVariable Long id) {
+        boolean deleted = userService.deleteUser(id);
+        Map<String, String> response = new HashMap<>();
+        if (deleted) {
+            response.put("message", "User deleted successfully");
+            return ResponseEntity.ok(response);
+        } else {
+            response.put("error", "User not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
     }
+    @GetMapping("/test-message")
+    public ResponseEntity<Map<String, String>> testMessage() {
+        Map<String, String> res = new HashMap<>();
+        res.put("message", "Test message");
+        return ResponseEntity.ok(res);
+    }
+
+
 
     // Get user by email (for login or lookup)
     @GetMapping("/email/{email}")
